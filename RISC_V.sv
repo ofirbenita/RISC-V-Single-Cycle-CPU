@@ -14,10 +14,10 @@ logic [31:0] mux2out; //to alu
 logic [2:0] ALUControl_out ;
 logic [31:0] ALUResult_top ;
 logic [31:0] Data_Memory_out ; //conect the output of data memory  with input I1 of mux2
-logic [31:0] mux_2out; // to reg file
+logic [31:0] mux_3out; // to reg file
 logic [1:0]  ALUOp_top;
-logic Branch_top  , MemWrite_top ,ALUSrc_top ,RegWrite_top,Zero_top,PCsrc_top; // control unit outputs 
-logic[1:0] ResultSrc_top,ImmSrc_top;// control unit outputs 
+logic Branch_top  , MemWrite_top ,ALUSrc_top ,RegWrite_top,Zero_top; // control unit outputs 
+logic[1:0] ImmSrc_top,ResultSrc_top,PCsrc_top;// control unit outputs 
 logic [31:0] PC_Target_top; 
  
  Program_Counter pc (
@@ -45,7 +45,7 @@ Reg_File reg_file(
 .rs1(Instruction_out_top[19:15]),
 .rs2(Instruction_out_top[24:20]),
 . rd(Instruction_out_top[11:7]),
-. Write_Data(mux_2out),
+. Write_Data(mux_3out),
 . RegWrite(RegWrite_top),
 .Read_data1(Read_data1_out),
 . Read_data2(Read_data2_top)
@@ -92,11 +92,12 @@ Data_Memory data_mem(
  .Data_out(Data_Memory_out) 
 );	
 
-Mux2 mux__2(  //conect between reg file and data memory
+Mux3 mux3(  //conect between reg file and data memory
 .DataInA(ALUResult_top)  ,
 . DataInB(Data_Memory_out)  ,
+.DataInC(PCplus4_top),
 .Select(ResultSrc_top)   ,
-. DataOut(mux_2out) 
+. DataOut(mux_3out) 
     );
     
 Control_Unit control(
@@ -112,9 +113,10 @@ Control_Unit control(
 .ALUOp(ALUOp_top)       
 	);
 	
-Mux2 mux_2(  // pc_target,alu result,pc+4
+Mux3 mux_3(  // pc_target,alu result,pc+4
 .DataInA(PCplus4_top)  ,
 . DataInB(PC_Target_top)  ,
+.DataInC(ALUResult_top),
 .Select(PCsrc_top)   ,
 . DataOut(nexttoPC_top) 
     );	

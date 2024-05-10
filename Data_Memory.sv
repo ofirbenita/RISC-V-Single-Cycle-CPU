@@ -10,12 +10,12 @@ input logic clk,
 input logic reset,
 output logic [31:0] Data_out 
 );
-logic[31:0] data_mem[63:0];
+logic[31:0] data_mem[255:0]; // 1KB RAM
 assign Data_out = data_mem[Address];
 integer i ; 
 always@(posedge clk ) begin 
   if(reset) begin 
-    for(i=0;i<64;i=i+1) begin 
+    for(i=0;i<256;i=i+1) begin 
        data_mem[i] <= 32'h0 ;
      end 
    end  

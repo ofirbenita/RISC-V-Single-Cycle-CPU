@@ -2,11 +2,11 @@
 
 module ALU(
 
-input  logic  [31:0]	SrcA    	 ,
-input   logic [31:0] SrcB		 ,
-input   logic  [2:0]	ALUControl ,
-output  logic	Zero,
-output  logic [31:0] ALUResult	    
+input  logic signed [31:0]	SrcA    	 ,
+input   logic signed [31:0] SrcB		 ,
+input   logic signed [2:0]	ALUControl ,
+output  logic signed	Zero,
+output  logic signed [31:0] ALUResult	    
 	);
 
 
@@ -19,7 +19,7 @@ begin
   3'b001 : begin ALUResult = SrcA - SrcB ; end //subtract
   3'b010 : begin ALUResult = SrcA & SrcB ; end //and
   3'b011 : begin ALUResult = SrcA | SrcB ; end //or
- 
+  default : begin ALUResult = 32'h0; end
   
  endcase
 end

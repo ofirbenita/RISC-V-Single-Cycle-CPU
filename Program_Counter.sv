@@ -19,7 +19,6 @@ output logic [31:0] PC_out
   
    initial begin 
  PC_out = 32'h0;
- #10;
  end
   
 endmodule 

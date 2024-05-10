@@ -4,8 +4,8 @@ module Control_Unit(
 
 input  [6:0] op  ,
 input Zero,
-output logic PCsrc,
-output logic	[1:0] ResultSrc , 
+output logic [1:0] PCsrc,
+output logic [1:0] ResultSrc , 
 output logic MemWrite ,
 output logic	ALUSrc ,
 output logic	[1:0] ImmSrc , 
@@ -22,7 +22,7 @@ always @(*)
 			begin
 				Branch	= 1'b0  ;
 				Jump	 	= 1'b0  ;
-				ResultSrc = 2'b01 ;
+				ResultSrc = 2'b00 ;
 				MemWrite	= 1'b0  ;
 				ALUSrc	= 1'b0  ;
 				ImmSrc	= 2'bxx ;
@@ -35,7 +35,7 @@ always @(*)
 			begin
 				Branch	= 1'b0  ;
 				Jump	 	= 1'b0  ;
-				ResultSrc = 2'b10 ;
+				ResultSrc = 2'b00  ;
 				MemWrite	= 1'b0  ;
 				ALUSrc	= 1'b1  ;
 				ImmSrc	= 2'b00 ;
@@ -46,7 +46,7 @@ always @(*)
 			begin
 				Branch	= 1'b0  ;
 				Jump	 	= 1'b0  ;
-				ResultSrc = 2'b10 ;
+				ResultSrc = 2'b01 ;
 				MemWrite	= 1'b0  ;
 				ALUSrc	= 1'b1  ;
 				ImmSrc	= 2'b00 ; 
@@ -56,8 +56,8 @@ always @(*)
 		7'b1100111: //jal
 			begin
 				Branch	= 1'b0  ;
-				Jump	 	= 1'b1  ;
-				ResultSrc = 2'b00 ;
+				Jump	 	= 2'b10  ;
+				ResultSrc = 1'b1 ;
 				MemWrite	= 1'b0  ;
 				ALUSrc	= 1'bx  ;
 				ImmSrc	= 2'b11 ;
@@ -70,7 +70,7 @@ always @(*)
 			begin
 				Branch	= 1'b1  ;
 				Jump	 	= 1'b0  ;
-				ResultSrc = 2'bxx ;
+				ResultSrc = 2'b00 ; //xx
 				MemWrite	= 1'b0  ;
 				ALUSrc	= 1'b0  ;
 				ImmSrc	= 2'b10 ;
@@ -84,7 +84,7 @@ always @(*)
 			begin
 				Branch	= 1'b0  ;
 				Jump	 	= 1'b0  ;
-				ResultSrc = 2'b10 ;
+				ResultSrc = 2'b00 ; //xx
 				MemWrite	= 1'b1  ;
 				ALUSrc	= 1'b1  ;
 				ImmSrc	= 2'b01 ;
@@ -97,7 +97,7 @@ always @(*)
 			begin
 				Branch	= 1'b0  ;
 				Jump	 	= 1'b0  ;
-				ResultSrc = 2'b10 ;
+				ResultSrc = 2'b00  ;
 				MemWrite	= 1'b0  ;
 				ALUSrc	= 1'b0  ;
 				ImmSrc	= 2'b00 ;
@@ -105,9 +105,17 @@ always @(*)
 				ALUOp		= 2'b00 ;			
 			end
 		endcase
+		if (Jump) begin 
+		  PCsrc = 2'b10;
+		  end
+		  else if(Zero&Branch) begin 
+		     PCsrc = 2'b01;
+		        end
+		     else begin 
+		     PCsrc = 2'b00;
+		     end
+  
 	end
-	
-assign PCsrc = (Zero&Branch) ? 1'b1 : 1'b0 ;
-   
+	   
    
 endmodule

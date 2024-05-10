@@ -19,7 +19,7 @@ always begin
   reset =1'b1;
 #80;
   reset =1'b0;
- #120;
+ #1200;
  
 end
 
